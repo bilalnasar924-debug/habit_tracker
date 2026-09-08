@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
     return Scaffold(
       backgroundColor: Color(0xff4D7DED),
       body: Center(
@@ -22,7 +37,7 @@ class LoginScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: TextField(
-                controller: emailController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -39,6 +54,7 @@ class LoginScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   filled: true,
@@ -76,8 +92,18 @@ class LoginScreen extends StatelessWidget {
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
             
-                onPressed: () {
-                  // Handle login logic here
+                onPressed: () async {
+                  try{
+                    await Provider.of<AuthProvider>(context, listen: false).Login(
+                      _emailController.text.trim(), _passwordController.text);
+                     Navigator.pushReplacementNamed(context, '/home');
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString()))
+                    );
+                  }
+                
+                 
                 },
                 child: Text('Login'),
               ),

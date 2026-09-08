@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/providers/auth_provider.dart';
+import 'package:provider/provider.dart' show Provider;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -8,6 +10,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final int minAge = 7;
   final int maxAge = 100;
    int _selectedAge = 7;
@@ -32,6 +36,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final List<String> _selectedHabits = [];
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     
     return Scaffold(
@@ -53,6 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -69,6 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   filled: true,
@@ -210,7 +223,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 54, 113, 250)),
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
-                onPressed: (){}, child: Text('Register', style: TextStyle(
+                onPressed: () async {
+                  try{
+                    await Provider.of<AuthProvider>(context, listen : false).signUp(
+                      _emailController.text.trim(), _passwordController.text, _selectedAge, _selectedCountry ?? '', _selectedHabits);
+                    if(!mounted) return ;
+                     Navigator.pushReplacementNamed(context, '/home');
+                  }catch(e){
+                     if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                  }
+                 
+                }, child: Text('Register', style: TextStyle(
                 color: Colors.white
               ),)),),
             )
