@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
 import 'package:habit_tracker/Screens/sign_up_screen.dart';
+import 'package:habit_tracker/auth_gate.dart';
 import 'package:habit_tracker/firebase_options.dart';
 import 'package:habit_tracker/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
       },
       debugShowCheckedModeBanner: false,
-    home: const LoginScreen(),
+    home: AuthGate(),
     );
   }
 }

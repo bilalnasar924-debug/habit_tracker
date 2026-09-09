@@ -10,6 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final int minAge = 7;
@@ -39,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
@@ -61,6 +63,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children:[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  hintText: 'Username',
+                  alignLabelWithHint: true,
+                  prefixIcon: Icon(Icons.person),
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: TextField(
@@ -226,6 +245,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () async {
                   try{
                     await Provider.of<AuthProvider>(context, listen : false).signUp(
+                      _usernameController.text.trim(),
                       _emailController.text.trim(), _passwordController.text, _selectedAge, _selectedCountry ?? '', _selectedHabits);
                     if(!mounted) return ;
                      Navigator.pushReplacementNamed(context, '/home');

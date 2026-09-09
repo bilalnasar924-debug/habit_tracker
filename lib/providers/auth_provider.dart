@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 class AuthProvider extends ChangeNotifier{
   User? _user;
   bool isLoading = false;
+  String? _username;
+  String? get username => _username;
   User? get user => _user;
   bool get isAuthenticated => _user != null;
 
-   Future<void> signUp(String email, String password,int age ,String country, List<String> habits) async{
+   Future<void> signUp( String username, String email, String password,int age ,String country, List<String> habits) async{
     isLoading = true;
     notifyListeners();
     try{
@@ -17,13 +19,14 @@ class AuthProvider extends ChangeNotifier{
       _user = user;
       
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'username': username,
         'email': email,
         'uid': user.uid,
         'age': age,
         'country': country,
         'habits': habits,
       });
-      
+      _username = username;
     } on FirebaseAuthException catch (e){
        switch (e.code) {
         case 'weak-password':
@@ -47,6 +50,9 @@ class AuthProvider extends ChangeNotifier{
     try{
       final crendential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       _user = crendential.user;
+      final doc = await FirebaseFirestore.instance.collection('users').doc(_user!.uid).get();
+
+      _username = doc.data()?['username'];
     } on FirebaseAuthException catch (e){
        print('Firebase Login Error: ${e.code}');
        print('Firebase Login Message: ${e.message}');
@@ -55,6 +61,13 @@ class AuthProvider extends ChangeNotifier{
       isLoading = false;
       notifyListeners();
     }
+   }
+
+
+   Future<void> logout() async{
+    await FirebaseAuth.instance.signOut();
+    _user = null;
+    notifyListeners();
    }
 
 }
