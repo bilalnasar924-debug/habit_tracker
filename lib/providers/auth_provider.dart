@@ -10,6 +10,22 @@ class AuthProvider extends ChangeNotifier{
   User? get user => _user;
   bool get isAuthenticated => _user != null;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Future<void> loadUserData() async{
+    final user = _auth.currentUser;
+    if(user == null){
+      return;
+    }
+    _user = user;
+
+    final doc = await _firestore.collection('users').doc(user.uid).get();
+    if(doc.exists){
+      _username = doc.data()?['username'];
+    }
+    notifyListeners();
+  }
+
    Future<void> signUp( String username, String email, String password,int age ,String country, List<String> habits) async{
     isLoading = true;
     notifyListeners();
@@ -67,6 +83,7 @@ class AuthProvider extends ChangeNotifier{
    Future<void> logout() async{
     await FirebaseAuth.instance.signOut();
     _user = null;
+    _username = null;
     notifyListeners();
    }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/Screens/configure_habit.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
 import 'package:habit_tracker/Screens/sign_up_screen.dart';
 import 'package:habit_tracker/auth_gate.dart';
 import 'package:habit_tracker/firebase_options.dart';
 import 'package:habit_tracker/providers/auth_provider.dart';
+import 'package:habit_tracker/providers/habit_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main()  async{
@@ -19,6 +21,7 @@ void main()  async{
   }
   runApp( MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (_) => HabitProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
     child: const MyApp()));
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        '/configurehabit' :(context) => ConfigureHabit(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/home': (context) => const HomeScreen(),

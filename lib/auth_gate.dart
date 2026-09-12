@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
-
+import 'package:provider/provider.dart';
+import 'package:habit_tracker/providers/auth_provider.dart';
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -23,7 +24,17 @@ class _AuthGateState extends State<AuthGate> {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
         if(snapshot.hasData){
-          return HomeScreen();
+          return FutureBuilder(
+            future: context.read<AuthProvider>().loadUserData(),
+            builder: (context, Usersnapshot) {
+              if(Usersnapshot.connectionState == ConnectionState.waiting){
+                return Scaffold(
+                  body: Center(child: CircularProgressIndicator(),),
+                );
+              }
+              return HomeScreen();
+            },
+          );
         }
         return LoginScreen();
       },
