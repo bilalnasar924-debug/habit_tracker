@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/Screens/configure_habit.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
+import 'package:habit_tracker/Screens/report_screen.dart';
 import 'package:habit_tracker/Screens/sign_up_screen.dart';
 import 'package:habit_tracker/auth_gate.dart';
 import 'package:habit_tracker/firebase_options.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        '/report_screen' : (context) => ReportScreen(),
         '/configurehabit' :(context) => ConfigureHabit(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),

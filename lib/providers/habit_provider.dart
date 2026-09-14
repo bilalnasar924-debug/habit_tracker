@@ -45,7 +45,8 @@ class HabitProvider extends ChangeNotifier {
           'id' : doc.id,
           'name' : data['name'],
           'color':data['color'],
-          'isCompleted' : data['isCompleted'] ?? false
+          'isCompleted' : data['isCompleted'] ?? false,
+          'completions' : Map<String,dynamic>.from(data['completions'] ?? {})
         };
       }).toList();
       notifyListeners();
@@ -99,16 +100,26 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
+  String _dateKey(DateTime date) {
+    final month = date.month.toString().padLeft(2,'0');
+    final day = date.day.toString().padLeft(2,'0');
+    return '${date.year}-$month-$day';
+  }
+
   Future<void> toggleHabit(String habitId , bool iscompleted) async{
     final user = _auth.currentUser;
     if(user == null){
       return;
     }
+    final datekey = _dateKey(DateTime.now());
     try{
-      await _firestore.collection('users').doc(user.uid).collection('habits').doc(habitId).update({'isCompleted' : iscompleted});
+      await _firestore.collection('users').doc(user.uid).collection('habits').doc(habitId).update({'isCompleted' : iscompleted , 'completions.$datekey' : iscompleted});
       final index = _habits.indexWhere((habit)=> habit['id'] == habitId);
       if(index != -1 ){
         _habits[index]['isCompleted'] = iscompleted;
+        final completions = Map<String,dynamic>.from(_habits[index]['completions'] ?? {});
+        completions[datekey] = iscompleted;
+        _habits[index]['completions'] = completions;
         notifyListeners();
       }
     }catch(e){

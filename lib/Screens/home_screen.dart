@@ -13,9 +13,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   @override
-void initState() {
+ void initState() {
   super.initState();
-
   Future.microtask(() {
     context.read<HabitProvider>().fetchHabits();
   });
@@ -87,7 +86,7 @@ void initState() {
               leading: const Icon(Icons.bar_chart),
               title: const Text('Report'),
               onTap: () {
-                // Handle report navigation
+                Navigator.pushNamed(context, '/report_screen');
               },
             ),
 
