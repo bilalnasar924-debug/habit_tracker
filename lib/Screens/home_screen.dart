@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.person),
               title: const Text('Personal Info'),
               onTap: () {
-                // Navigate to personal info screen
+               Navigator.pushNamed(context, '/personal_info');
               },
             ),
 

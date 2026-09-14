@@ -9,6 +9,11 @@ class AuthProvider extends ChangeNotifier{
   String? get username => _username;
   User? get user => _user;
   bool get isAuthenticated => _user != null;
+  int? _age;
+  String? _country;
+
+  int? get age => _age;
+  String? get country => _country; 
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -22,6 +27,8 @@ class AuthProvider extends ChangeNotifier{
     final doc = await _firestore.collection('users').doc(user.uid).get();
     if(doc.exists){
       _username = doc.data()?['username'];
+      _age = doc.data()?['age'];
+      _country = doc.data()?['country'];
     }
     notifyListeners();
   }
@@ -60,6 +67,7 @@ class AuthProvider extends ChangeNotifier{
    }
 
 
+
    Future<void> Login(String email , String password) async{
     isLoading = true;
     notifyListeners();
@@ -85,6 +93,29 @@ class AuthProvider extends ChangeNotifier{
     _user = null;
     _username = null;
     notifyListeners();
+   }
+
+   Future<void> updatePersonalInfo(String username , String country , int age)async{
+    final user = _auth.currentUser;
+    if(user == null) return;
+    isLoading = true;
+    notifyListeners();
+    try{
+      await _firestore.collection('users').doc(user.uid).update({
+        'username' : username,
+        'country' : country,
+        'age' : age
+      });
+      _username = username;
+      _country = country;
+      _age = age;
+
+    }catch(e){
+      debugPrint("Error in Updating Personal INfo $e");
+    }finally{
+      isLoading= false;
+      notifyListeners();
+    }
    }
 
 }
