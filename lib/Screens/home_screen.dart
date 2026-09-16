@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.notifications),
               title: const Text('Notifications'),
               onTap: () {
-                // Handle notifications navigation
+               Navigator.pushNamed(context, '/notification_screen');
               },
             ),
 

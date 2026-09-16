@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/utils/date_utils.dart';
 
 class HabitProvider extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -99,19 +100,12 @@ class HabitProvider extends ChangeNotifier {
       debugPrint("Error in Deleting Habit $e");
     }
   }
-
-  String _dateKey(DateTime date) {
-    final month = date.month.toString().padLeft(2,'0');
-    final day = date.day.toString().padLeft(2,'0');
-    return '${date.year}-$month-$day';
-  }
-
   Future<void> toggleHabit(String habitId , bool iscompleted) async{
     final user = _auth.currentUser;
     if(user == null){
       return;
     }
-    final datekey = _dateKey(DateTime.now());
+   final datekey = dateKey(DateTime.now());
     try{
       await _firestore.collection('users').doc(user.uid).collection('habits').doc(habitId).update({'isCompleted' : iscompleted , 'completions.$datekey' : iscompleted});
       final index = _habits.indexWhere((habit)=> habit['id'] == habitId);

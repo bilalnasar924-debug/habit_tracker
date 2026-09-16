@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
+import 'package:habit_tracker/main.dart';
 import 'package:provider/provider.dart';
 import 'package:habit_tracker/providers/auth_provider.dart';
 class AuthGate extends StatefulWidget {
@@ -32,12 +34,14 @@ class _AuthGateState extends State<AuthGate> {
                   body: Center(child: CircularProgressIndicator(),),
                 );
               }
+              notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
               return HomeScreen();
             },
           );
         }
         return LoginScreen();
       },
+
 
     );
   }
