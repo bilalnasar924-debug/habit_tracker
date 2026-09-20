@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/providers/auth_provider.dart';
 import 'package:habit_tracker/providers/habit_provider.dart';
+import 'package:habit_tracker/providers/quote_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   super.initState();
   Future.microtask(() {
     context.read<HabitProvider>().fetchHabits();
+    context.read<QuoteProvider>().fetchQuote();
   });
 }
   @override
@@ -124,10 +126,36 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          Consumer<QuoteProvider>(builder:(context , quoteProvider , _) {
+            if(quoteProvider.isLoading){
+              return const Padding(padding: EdgeInsets.symmetric(vertical: 12),
+              child: Center(child: CircularProgressIndicator(),),
+              );
+            }
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xff4D7DED).withOpacity(0.1),
+               borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('"${quoteProvider.quote}"',
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 14)),
+                const SizedBox(height: 6),
+                Text('- ${quoteProvider.author}',
+              style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                ],
+              ),
+            );
+          } ),
 
           // =========================
           // TO-DO
           // =========================
+          const SizedBox(height: 15,),
 
           const Text(
             'TO-DO',

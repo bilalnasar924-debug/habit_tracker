@@ -12,6 +12,7 @@ import 'package:habit_tracker/firebase_options.dart';
 import 'package:habit_tracker/providers/auth_provider.dart';
 import 'package:habit_tracker/providers/habit_provider.dart';
 import 'package:habit_tracker/providers/notification_provider.dart';
+import 'package:habit_tracker/providers/quote_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -40,6 +41,7 @@ void main()  async{
   await initNotification();  
   runApp( MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (_) => QuoteProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => HabitProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
