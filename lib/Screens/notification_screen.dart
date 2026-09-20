@@ -125,7 +125,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 child: const Text('Save Notifications'),
               ),
             ),
-          
+          const SizedBox(height: 25),
+
           
           ],
         ),

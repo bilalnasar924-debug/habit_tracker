@@ -36,17 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color(0xff4D7DED),
-        title: Text(
-          '${authProvider.username}',
-          style: const TextStyle(
-            fontSize: 25,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+       centerTitle: true,
+      backgroundColor: const Color(0xff4D7DED),
+      title: Row(
+       mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      const Icon(Icons.check_circle, color: Colors.white),
+      const SizedBox(width: 8),
+      Text(
+        '${authProvider.username}',
+        style: const TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
       ),
+    ],
+  ),
+),
 
       // =========================
       // DRAWER

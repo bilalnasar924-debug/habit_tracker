@@ -89,5 +89,4 @@ class NotificationProvider  extends ChangeNotifier{
     }
   }
 
- 
 }

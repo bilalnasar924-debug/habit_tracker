@@ -232,6 +232,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             ),
+             const SizedBox(height: 15),
+            TextButton(
+              onPressed: () {
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+           child: const Text(
+             'Already have an account? Login',
+             style: TextStyle(color: Colors.white),
+             ),
+           ),
             SizedBox(height: 25,),
             Align(
               alignment: Alignment.bottomCenter,
