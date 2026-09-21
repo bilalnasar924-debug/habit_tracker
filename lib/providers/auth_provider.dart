@@ -87,6 +87,23 @@ class AuthProvider extends ChangeNotifier{
     }
    }
 
+   Future<void> forgetPassword(String email) async {
+    isLoading = true;
+    notifyListeners();
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    }catch(e){
+      debugPrint('Error in Reseting Password $e');
+      rethrow;
+    }finally{
+      isLoading = false;
+      notifyListeners();
+    }
+    
+
+
+   }
+
 
    Future<void> logout() async{
     await FirebaseAuth.instance.signOut();

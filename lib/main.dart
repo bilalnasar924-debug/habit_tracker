@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habit_tracker/Screens/configure_habit.dart';
+import 'package:habit_tracker/Screens/forget_password_screen.dart';
 import 'package:habit_tracker/Screens/home_screen.dart';
 import 'package:habit_tracker/Screens/login_screen.dart';
 import 'package:habit_tracker/Screens/notification_screen.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        '/forgetpassword' : (context) => ForgetPasswordScreen(),
         '/notification_screen' : (context) => NotificationScreen(),
         '/personal_info' : (context) => PersonalInfoScreen(),
         '/report_screen' : (context) => ReportScreen(),
